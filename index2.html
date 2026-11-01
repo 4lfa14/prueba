@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aula virtual | Base matemática para ingeniería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#CBDED7;--grid:#A3C1B7;--ink:#14283B;--soft:#4B6172;--card:#FFFFFF;--accent:#1F6F8B;--pencil:#F2B632;--err:#B3261E;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1C26;--grid:#1A2D3A;--ink:#E8F0F2;--soft:#9FB4C0;--card:#16283469;--accent:#5CB8D6;--pencil:#F2B632;--err:#FF8A80;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C26;--grid:#1A2D3A;--ink:#E8F0F2;--soft:#9FB4C0;--card:#16283469;--accent:#5CB8D6;--pencil:#F2B632;--err:#FF8A80;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;color:var(--ink);font-family:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.55}
+h1,h2,h3{font-family:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;line-height:1.15;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+.hidden{display:none!important}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:24px 18px}
+.box{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:30px 26px;width:100%;max-width:420px;box-shadow:6px 6px 0 var(--pencil)}
+.box h1{font-size:2rem;margin-bottom:8px}
+.box p{margin:0 0 20px;color:var(--soft)}
+label{display:block;font-weight:600;margin:14px 0 6px}
+input{width:100%;font:inherit;padding:11px 12px;border:2px solid var(--ink);border-radius:4px;background:var(--bg);color:var(--ink)}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{font:600 1rem "Nunito Sans",sans-serif;cursor:pointer;border:2px solid var(--ink);border-radius:4px;background:var(--ink);color:var(--bg);padding:12px 18px}
+#entrar{width:100%;margin-top:22px}
+#err{color:var(--err);min-height:1.5em;margin:12px 0 0;font-weight:600}
+/* aula */
+header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+header.top h1{font-size:clamp(1.7rem,5vw,2.4rem)}
+header.top p{margin:6px 0 0;color:var(--soft)}
+.pie{display:flex;justify-content:flex-end;margin-top:36px}
+.contacto{justify-self:center;width:100vw;max-width:none;margin-top:18px;padding-top:20px;border-top:2px solid var(--ink);text-align:left}
+html,body{overflow-x:hidden}
+.contacto h3{font-size:1.2rem;margin-bottom:12px;padding-left:max(12px,env(safe-area-inset-left,0px))}
+.contacto .links{flex-direction:column;align-items:flex-start;gap:8px;padding:0 0 0 max(12px,env(safe-area-inset-left,0px))}
+.contacto .links a,.contacto .links span{padding:8px 12px}
+.aviso{margin:0 0 10px}
+.cerrar{background:#C62828;border-color:#C62828;color:#fff}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{font:600 1rem "Nunito Sans",sans-serif;cursor:pointer;padding:10px 16px;border:2px solid var(--ink);border-radius:4px;background:var(--card);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.sub .tab{font-size:.9rem;padding:7px 12px;border-width:1.5px}
+.sub .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.intro{color:var(--soft);margin:0 0 18px}
+.home{min-height:55vh;display:grid;align-content:center;justify-items:start;gap:30px;padding:10px 0}
+.big{position:relative;display:block;width:100%;max-width:520px;text-align:center;text-decoration:none;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:30px 20px;box-shadow:6px 6px 0 var(--pencil);font-family:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;font-size:1.8rem;font-weight:700;line-height:1.15}
+.big::after{content:attr(data-tip);position:absolute;left:calc(100% + 16px);top:-2px;bottom:-2px;display:flex;align-items:center;box-sizing:border-box;width:max-content;max-width:min(420px,calc(50vw - 110px));background:var(--ink);color:var(--bg);font:400 1.15rem/1.4 "Nunito Sans",system-ui,sans-serif;text-align:left;padding:8px 13px;border-radius:4px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:5}
+.big:hover::after,.big:focus-visible::after{opacity:1}
+@media (max-width:900px){.big::after{left:0;right:0;width:auto;max-width:none;font-size:1rem;border-radius:6px}}
+.big:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--pencil)}
+.volver{display:inline-block;margin-bottom:14px;font-weight:600;color:var(--ink)}
+#vista h2{font-size:1.9rem;margin-bottom:12px}
+.tema{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:18px;margin-bottom:18px}
+.tema h3{font-size:1.25rem;margin-bottom:12px}
+.vid{margin-bottom:16px}
+.vid:last-child{margin-bottom:0}
+.vid h4{font-family:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;font-size:1rem;margin:0 0 8px}
+.video{position:relative;aspect-ratio:16/9;background:var(--grid);border-radius:4px;overflow:hidden;display:grid;place-items:center;color:var(--soft);text-align:center;padding:10px}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vacio{margin:0;color:var(--soft)}
+.links{display:flex;gap:10px;flex-wrap:wrap}
+.links a,.links span{padding:9px 14px;border:2px solid var(--ink);border-radius:4px;font-weight:600;font-size:.95rem;text-decoration:none;color:var(--ink)}
+.links a{background:var(--pencil);color:#14283B}
+.links span{border-style:dashed;color:var(--soft)}
+@media (prefers-reduced-motion:no-preference){.box{animation:in .35s ease-out}@keyframes in{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <div class="box">
+    <h1>Aula virtual</h1>
+    <p>Entra con los datos que usaste al inscribirte.</p>
+    <label for="ced">Cédula</label>
+    <input id="ced" inputmode="numeric" autocomplete="off" placeholder="Solo números">
+    <label for="nom">Nombre</label>
+    <input id="nom" autocomplete="off">
+    <label for="ape">Apellido</label>
+    <input id="ape" autocomplete="off">
+    <button class="btn" id="entrar" type="button">Entrar al aula</button>
+    <p id="err" role="alert"></p>
+  </div>
+</section>
+
+<main id="aula" class="wrap hidden">
+  <header class="top">
+    <div>
+      <h1>Base matemática para ingeniería</h1>
+      <p id="saludo"></p>
+    </div>
+  </header>
+  <nav class="home" id="home" aria-label="Secciones del aula">
+    <a class="big" href="#info" data-tip="Link de las clases en Zoom, horario, avisos y cambios de horario.">Información importante</a>
+    <a class="big" href="#teoria" data-tip="Videos con la explicación de cada tema, de potencias a trigonometría.">Teoría</a>
+    <a class="big" href="#guias" data-tip="Guías de ejercicios de cada tema, cada una con su formulario.">Guías</a>
+    <a class="big" href="#resueltos" data-tip="Videos donde resuelvo ejercicios prácticos, tema por tema.">Ejercicios resueltos</a>
+    <a class="big" href="#examenes" data-tip="Los 2 exámenes del curso y dónde entregarlos.">Exámenes</a>
+    <div class="contacto" id="contacto"></div>
+  </nav>
+  <div id="vista" class="hidden"><a class="volver" href="#inicio">Volver al inicio</a><h2 id="titulo"></h2><div id="contenido"></div></div>
+  <div class="pie"><button class="btn cerrar" id="salir" type="button">Cerrar sesión</button></div>
+</main>
+
+<script>
+/* ===== CONFIGURACIÓN: aquí cambias todo ===== */
+var SAL = "aula-ing-2026";
+
+/* Lista de inscritos (guardada como código, no como nombres).
+   Para agregar un estudiante, pásale a Claude su cédula, nombre y apellido. */
+var INSCRITOS = [
+  "ee4cbe7ca618cc67c27f4d21a4b0781bd3eb3817cf78ef3d68bf942fcaa1d0c3", /* prueba: 12345678 / Prueba / Estudiante */
+  "9756dc3670f27cfbd697d8cc28d3d324fbe82e0807b2c7b0373b0f03490a151c" /* Hector Gouverneur */
+];
+
+/* Cada tema tiene: videos de teoría, una guía de ejercicios y videos de ejercicios resueltos.
+   Videos: {t:"Título", yt:"ID de YouTube"} (el ID es lo que va después de v=). Guía: link de Drive. */
+/* Información importante y contacto. Pega aquí los links. */
+var INFO={zoom:"",horario:"Lunes a jueves, 1 hora y media",avisos:[]}; /* avisos: [{f:"Lunes 9",t:"Texto del aviso"}] */
+var CONTACTO=[{n:"WhatsApp",url:""},{n:"Gmail",url:""},{n:"Instagram",url:""},{n:"Facebook",url:""},{n:"TikTok",url:""}];
+/* Exámenes: WA = tu número con código de país y sin signos (ej: 584121234567). examen = link del examen en Drive. entrega = link del formulario de Google. */
+var WA="";
+var EXAMENES=[
+  {t:"Examen 1", sem:"Semanas 1 y 2", temas:"Números reales, propiedades de las potencias, logaritmos y productos notables", examen:"", entrega:""},
+  {t:"Examen 2", sem:"Semanas 3 y 4", temas:"Factorización y trigonometría", examen:"", entrega:""}
+];
+var TEMAS = [
+  {n:"Números reales", teoria:[], guia:"", form:"", resueltos:[]},
+  {n:"Propiedades de las potencias", teoria:[], guia:"", form:"", resueltos:[]},
+  {n:"Logaritmos", teoria:[], guia:"", form:"", resueltos:[]},
+  {n:"Productos notables", teoria:[], guia:"", form:"", resueltos:[]},
+  {n:"Factorización", teoria:[], guia:"", form:"", resueltos:[]},
+  {n:"Trigonometría", teoria:[], guia:"", form:"", resueltos:[]}
+];
+/* ===== FIN DE LA CONFIGURACIÓN ===== */
+
+function $(id){return document.getElementById(id)}
+function norm(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim()}
+function cap(s){return s.replace(/(^|\s)\S/g,function(c){return c.toUpperCase()})}
+async function sha(t){
+  var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));
+  return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("");
+}
+function clave(c,n,a){return c.replace(/\D/g,"")+"|"+norm(n)+"|"+norm(a)+"|"+SAL}
+
+async function entrar(){
+  var c=$("ced").value,n=$("nom").value,a=$("ape").value;
+  $("err").textContent="";
+  if(!c.replace(/\D/g,"")||!norm(n)||!norm(a)){$("err").textContent="Completa la cédula, el nombre y el apellido.";return}
+  var h=await sha(clave(c,n,a));
+  if(INSCRITOS.indexOf(h)===-1){$("err").textContent="No encontramos esos datos. Revisa que estén como los escribiste al inscribirte.";return}
+  try{sessionStorage.setItem("aula_ok",h);sessionStorage.setItem("aula_nombre",norm(n))}catch(e){}
+  mostrar(norm(n));
+}
+function mostrar(nombre){
+  $("login").classList.add("hidden");
+  $("aula").classList.remove("hidden");
+  $("saludo").textContent="Hola, "+cap(nombre.split(" ")[0])+". Aquí tienes tus clases, guías y parciales.";
+  armar();
+}
+function salir(){
+  try{sessionStorage.clear()}catch(e){}
+  $("aula").classList.add("hidden");
+  $("login").classList.remove("hidden");
+  ["ced","nom","ape"].forEach(function(i){$(i).value=""});
+}
+var SECCIONES=["Teoría","Guías","Ejercicios resueltos","Información importante","Exámenes"];
+function contacto(){
+  $("contacto").innerHTML='<h3>Contacto</h3><div class="links">'+CONTACTO.map(function(x){return x.url?'<a href="'+x.url+'" target="_blank" rel="noopener">'+x.n+'</a>':'<span>'+x.n+' pendiente</span>'}).join("")+'</div>';
+}
+var RUTAS={teoria:0,guias:1,resueltos:2,info:3,examenes:4};
+function ruta(){
+  if($("aula").classList.contains("hidden"))return;
+  var k=location.hash.replace("#","");
+  if(RUTAS.hasOwnProperty(k)){
+    secActual=RUTAS[k];
+    $("home").classList.add("hidden");
+    $("vista").classList.remove("hidden");
+    $("titulo").textContent=SECCIONES[secActual];
+    pintar();
+  }else{
+    $("vista").classList.add("hidden");
+    $("home").classList.remove("hidden");
+  }
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",ruta);
+var secActual=0,temaActual=0;
+function armar(){
+  contacto();
+  ruta();
+}
+function video(v,i){
+  return '<div class="vid"><h4>'+(v.t||"Video "+(i+1))+'</h4><div class="video">'+
+    (v.yt?'<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.yt)+'" title="'+(v.t||"Video")+'" allowfullscreen loading="lazy"></iframe>':'<span>El video se publica pronto</span>')+
+    '</div></div>';
+}
+function lista(vs){
+  return vs.length?vs.map(video).join(""):'<p class="vacio">Aún no hay videos de este tema.</p>';
+}
+function pintar(){
+  var h="";
+  if(secActual===0){
+    h+='<p class="intro">Aquí está la explicación de cada tema. Míralos en orden.</p>';
+    TEMAS.forEach(function(t){h+='<article class="tema"><h3>'+t.n+'</h3>'+lista(t.teoria)+'</article>'});
+  }else if(secActual===1){
+    h+='<p class="intro">Guías de ejercicios para practicar cada tema por tu cuenta.</p>';
+    TEMAS.forEach(function(t){
+      h+='<article class="tema"><h3>'+t.n+'</h3><div class="links">'+
+        (t.guia?'<a href="'+t.guia+'" target="_blank" rel="noopener">Abrir guía de ejercicios</a>':'<span>Guía pendiente</span>')+
+        (t.form?'<a href="'+t.form+'" target="_blank" rel="noopener">Abrir formulario</a>':'<span>Formulario pendiente</span>')+
+        '</div></article>';
+    });
+  }else if(secActual===4){
+    h+='<p class="intro">Aquí están tus exámenes y dónde entregarlos. Antes de enviar, revisa que el archivo o la foto se vea completo.</p>';
+    EXAMENES.forEach(function(e){
+      var wa=WA?'https://wa.me/'+WA+'?text='+encodeURIComponent('Hola, te envío mi '+e.t.toLowerCase()+'.'):'';
+      h+='<article class="tema"><h3>'+e.t+'</h3><p class="vacio" style="margin-bottom:12px">'+e.sem+': '+e.temas+'.</p><div class="links">'+
+        (e.examen?'<a href="'+e.examen+'" target="_blank" rel="noopener">Abrir examen</a>':'<span>Examen pendiente</span>')+
+        (e.entrega?'<a href="'+e.entrega+'" target="_blank" rel="noopener">Entregar examen</a>':'<span>Entrega pendiente</span>')+
+        (wa?'<a href="'+wa+'" target="_blank" rel="noopener">Enviar por WhatsApp</a>':'<span>WhatsApp pendiente</span>')+
+        '</div></article>';
+    });
+  }else if(secActual===3){
+    h+='<article class="tema"><h3>Link de las clases</h3><p class="vacio">'+INFO.horario+'</p><div class="links" style="margin-top:12px">'+(INFO.zoom?'<a href="'+INFO.zoom+'" target="_blank" rel="noopener">Entrar a la clase en Zoom</a>':'<span>Link pendiente</span>')+'</div></article>';
+    h+='<article class="tema"><h3>Avisos y cambios de horario</h3>'+(INFO.avisos.length?INFO.avisos.map(function(a){return '<p class="aviso"><strong>'+a.f+'</strong> '+a.t+'</p>'}).join(""):'<p class="vacio">Por ahora no hay avisos.</p>')+'</article>';
+  }else{
+    h+='<p class="intro">Aquí resuelvo ejercicios prácticos, tema por tema. Elige el tema.</p><nav class="tabs sub" id="sub" role="tablist" aria-label="Temas">';
+    TEMAS.forEach(function(t,i){h+='<button class="tab" type="button" role="tab" data-i="'+i+'" aria-selected="'+(i===temaActual)+'">'+t.n+'</button>'});
+    h+='</nav><article class="tema"><h3>'+TEMAS[temaActual].n+'</h3>'+lista(TEMAS[temaActual].resueltos)+'</article>';
+  }
+  $("contenido").innerHTML=h;
+  document.querySelectorAll("#sub .tab").forEach(function(b){b.onclick=function(){temaActual=+b.dataset.i;pintar()}});
+}
+$("entrar").onclick=entrar;
+$("salir").onclick=salir;
+["ced","nom","ape"].forEach(function(i){$(i).addEventListener("keydown",function(e){if(e.key==="Enter")entrar()})});
+try{
+  var ok=sessionStorage.getItem("aula_ok");
+  if(ok&&INSCRITOS.indexOf(ok)!==-1)mostrar(sessionStorage.getItem("aula_nombre")||"estudiante");
+}catch(e){}
+</script>
+</body>
+</html>
